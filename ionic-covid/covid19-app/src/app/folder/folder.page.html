@@ -1,0 +1,95 @@
+<ion-header [translucent]="true" no-border>
+  <ion-toolbar no-border>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content  [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="pullRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div *ngIf="fetched" class="section">
+    <div class="refresh-time" *ngIf="refreshTime">refreshed {{ refreshTime }} ago</div>
+    <div class="card-header fadeInUp" style="animation-delay: 0.2s;">
+      <h1>Covid-19 <span>Tracker</span></h1>
+    </div>
+    <div class="last-update fadeInUp" style="animation-delay: 0.4s;">
+      <p>Last Updated</p>
+      <p>{{ times.time }} ago</p>
+      <p>{{ times.date }}</p>
+    </div>
+    <div class="top-results">
+      <div class="main-card fadeInUp" style="animation-delay: 0.5s;">
+        <p class="title">Confirmed</p>
+        <div class="counts">
+          <p class="sub-count">[ <span>+</span> {{ newCases.deltaconfirmed ? newCases.deltaconfirmed : 0 }} ]</p>
+          <p>{{ total.confirmed }}</p>
+        </div>
+      </div>
+      <div class="main-card fadeInUp" style="animation-delay: 0.6s;">
+        <p class="title">Active</p>
+        <div class="counts">
+          <!-- <p>[+ {{ newCases.confirmeddelta ? newCases.confirmeddelta : 0 }}]</p> -->
+          <p>{{ total.active }}</p>
+        </div>
+      </div>
+      <div class="main-card fadeInUp" style="animation-delay: 0.7s;">
+        <p class="title">Recovered</p>
+        <div class="counts">
+          <p class="sub-count">[ <span>+</span> {{ newCases.deltarecovered ? newCases.deltarecovered : 0 }} ]</p>
+          <p>{{ total.recovered }}</p>
+        </div>
+      </div>
+      <div class="main-card fadeInUp" style="animation-delay: 0.8s;">
+        <p class="title">Death</p>
+        <div class="counts">
+          <p class="sub-count">[ <span>+</span> {{ newCases.deltadeaths ? newCases.deltadeaths : 0 }} ]</p>
+          <p>{{ total.deaths }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="main-section fadeInUp" style="animation-delay: 1s;">
+      <div class="header">
+        <p>States:</p>
+      </div>
+      <div class="content">
+        <div *ngFor="let state of mappedStates.slice(1, -1)" class="card" (click)="redirectPage(state.state)">
+          <!-- {{ state.state }} -->
+
+          <div class="logo" [style.background-color]="state.color"><p>{{state.state.slice(0,1)}}</p></div>
+          <div class="inner">
+            <div class="inner-left">
+              <p>{{state.state}}</p>
+              <p *ngIf="state?.deltaconfirmed + state?.deltarecovered + state?.deltadeaths > 0" class="count">
+                <span style="color: #f5e513;">C +{{ state.deltaconfirmed }}   &nbsp;</span>
+                <!-- <span style="color: #66d4b1;">A +{{ state.delta.active }}   &nbsp;</span> -->
+                <span>R +{{ state.deltarecovered }}   &nbsp;</span>
+                <span style="color: red;">D +{{ state.deltadeaths }}  </span>
+              </p>
+            </div>
+            <div class="inner-right">
+              <div *ngIf="state.confirmed > 0" class="cnf">
+                <p>confirmed</p>
+                <p class="count">{{ state.confirmed}}+</p>
+              </div>
+              <div *ngIf="state.confirmed == 0">
+                <p style="color: #73dad6;">Safe</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="error" class="content section-2">
+    <div class="card fadeInUp" style="animation-delay: 0.5s;" (click)="tap()">
+      Tap to Refresh
+    </div>
+  </div>
+  <div *ngIf="!fetched && !error" class="section-2">
+    <div class="loader"></div>
+  </div>
+</ion-content>

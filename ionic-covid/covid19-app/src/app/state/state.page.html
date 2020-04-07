@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="deem">
+    <ion-buttons class="margin-left-header" slot="start">
+      <ion-back-button defaultHref="/folder/home"></ion-back-button>
+    </ion-buttons>
+    <ion-item lines="none" color="deem" class="">
+      <ion-title>{{ state }}</ion-title>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="lightdeem">
+  <div class="content">
+    <div class="total fadeInUp" style="animation-delay: 0.3s;">
+      <p>Total</p>
+      <p> {{ total }} <span>[ + {{ todayTotal }} ]</span></p>
+    </div>
+    <div *ngIf="stateWiseData && stateWiseData.length">
+      <div *ngFor="let district of stateWiseData" class="card fadeInUp" style="animation-delay: 0.5s;">
+        <!-- {{ state.state }} -->
+  
+        <div class="logo" style.background-color="state && state.color ? state.color : '#ffffff'"><p>{{district.district.slice(0,1)}}</p></div>
+        <div class="inner">
+          <div class="inner-left">
+            <p>{{district.district}}</p>
+            <p *ngIf="district.delta.confirmed > 0" class="count">
+              <span style="color: #f5e513;">C +{{ district.delta.confirmed }}   &nbsp;</span>
+            </p>
+          </div>
+          <div class="inner-right">
+            <div *ngIf="district.confirmed > 0" class="cnf">
+              <p>confirmed</p>
+              <p class="count">{{ district.confirmed}}+</p>
+            </div>
+            <div *ngIf="district.confirmed == 0">
+              <p style="color: #73dad6;">Safe</p>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+   
+  </div>
+</ion-content>
